@@ -26,7 +26,7 @@ function App() {
   });
 
   return (
-    <div className="App">
+    <div className="App" style={{ padding: 20 }}>
       {userInfo ? (
         <>
           <p>{`Hi ${userInfo.displayName}`}</p>
