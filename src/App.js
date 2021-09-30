@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth, signOut } from "firebase/auth";
 
+import Button from '@mui/material/Button';
+
 import SignIn from './SignIn';
 
 function App() {
@@ -28,7 +30,8 @@ function App() {
       {userInfo ? (
         <>
           <p>{`Hi ${userInfo.displayName}`}</p>
-          <button
+          <Button
+            variant="contained"
             onClick={() => {
               const auth = getAuth();
               signOut(auth)
@@ -38,7 +41,7 @@ function App() {
             }}
           >
             Log out
-          </button>
+          </Button>
         </>
       ) : <SignIn />}
     </div>
