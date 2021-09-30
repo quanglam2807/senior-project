@@ -1,22 +1,46 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
+import { getAuth, signOut } from "firebase/auth";
+
+import SignIn from './SignIn';
 
 function App() {
+  const [userInfo, setUserInfo] = useState(null);
+
+  // docs: https://github.com/firebase/firebaseui-web-react
+  // Listen to the Firebase Auth state and set the local state.
+  useEffect(() => {
+    const unregisterAuthObserver = getAuth().onAuthStateChanged((user) => {
+      if (!user) {
+        setUserInfo(null);
+        return;
+      }
+      setUserInfo({
+        email: user.email,
+        displayName: user.displayName,
+      })
+    });
+    // Make sure we un-register Firebase observers when the component unmounts.
+    return () => unregisterAuthObserver();
+  });
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {userInfo ? (
+        <>
+          <p>{`Hi ${userInfo.displayName}`}</p>
+          <button
+            onClick={() => {
+              const auth = getAuth();
+              signOut(auth)
+                .catch((error) => {
+                  alert(error.message);
+                });
+            }}
+          >
+            Log out
+          </button>
+        </>
+      ) : <SignIn />}
     </div>
   );
 }
