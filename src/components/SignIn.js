@@ -2,7 +2,7 @@ import React from 'react';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import Button from '@mui/material/Button';
 
-import './firebase-app';
+import '../firebase-app';
 
 const SignIn = () => {
   return (

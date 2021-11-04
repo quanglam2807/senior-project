@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 
 import SignIn from './SignIn';
 
-function App() {
+const App = () => {
   const [userInfo, setUserInfo] = useState(null);
 
   // docs: https://github.com/firebase/firebaseui-web-react
