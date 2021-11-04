@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAuth, signOut } from "firebase/auth";
+import { getAuth, signOut } from 'firebase/auth';
 
 import Button from '@mui/material/Button';
 
@@ -19,7 +19,7 @@ const App = () => {
       setUserInfo({
         email: user.email,
         displayName: user.displayName,
-      })
+      });
     });
     // Make sure we un-register Firebase observers when the component unmounts.
     return () => unregisterAuthObserver();
@@ -36,7 +36,8 @@ const App = () => {
               const auth = getAuth();
               signOut(auth)
                 .catch((error) => {
-                  alert(error.message);
+                  // eslint-disable-next-line no-alert
+                  window.alert(error.message);
                 });
             }}
           >
@@ -46,6 +47,6 @@ const App = () => {
       ) : <SignIn />}
     </div>
   );
-}
+};
 
 export default App;
