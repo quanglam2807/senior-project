@@ -7,9 +7,13 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+
 import './firebase-app';
 
 import App from './components/App';
+
+serviceWorkerRegistration();
 
 ReactDOM.render(
   <React.StrictMode>
