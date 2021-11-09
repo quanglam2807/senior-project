@@ -13,8 +13,6 @@ import './firebase-app';
 
 import App from './components/App';
 
-serviceWorkerRegistration();
-
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
