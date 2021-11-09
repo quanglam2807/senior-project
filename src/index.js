@@ -4,6 +4,7 @@ import {
   BrowserRouter,
   Routes,
   Route,
+  Navigate,
 } from 'react-router-dom';
 
 import '@fontsource/roboto/300.css';
@@ -12,14 +13,20 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 import LayoutUser from './components/layouts/LayoutUser';
-import Menu from './components/pages/Menu';
+import LayoutAdmin from './components/layouts/LayoutAdmin';
+import UserMenu from './components/pages/UserMenu';
+import AdminMenu from './components/pages/AdminMenu';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LayoutUser />}>
-          <Route path="" element={<Menu />} />
+        <Route exact path="/" element={<Navigate to="/user" />} />
+        <Route path="/user" element={<LayoutUser />}>
+          <Route path="" element={<UserMenu />} />
+        </Route>
+        <Route path="/admin" element={<LayoutAdmin />}>
+          <Route path="" element={<AdminMenu />} />
         </Route>
       </Routes>
     </BrowserRouter>
