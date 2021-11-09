@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { getAuth, signOut } from 'firebase/auth';
+
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -84,7 +86,18 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Log Out</MenuItem>
+      <MenuItem
+        onClick={() => {
+          const auth = getAuth();
+          signOut(auth)
+            .catch((error) => {
+              // eslint-disable-next-line no-alert
+              window.alert(error.message);
+            });
+        }}
+      >
+        Log Out
+      </MenuItem>
     </Menu>
   );
 

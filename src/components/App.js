@@ -1,51 +1,58 @@
 import React, { useEffect, useState } from 'react';
-import { getAuth, signOut } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
+import {
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
+import CssBaseline from '@mui/material/CssBaseline';
 
-import Button from '@mui/material/Button';
-
-import SignIn from './SignIn';
+import LayoutUser from './layouts/LayoutUser';
+import LayoutAdmin from './layouts/LayoutAdmin';
+import UserMenu from './pages/UserMenu';
+import AdminMenu from './pages/AdminMenu';
 
 const App = () => {
-  const [userInfo, setUserInfo] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(Boolean(getAuth().currentUser));
 
   // docs: https://github.com/firebase/firebaseui-web-react
   // Listen to the Firebase Auth state and set the local state.
   useEffect(() => {
     const unregisterAuthObserver = getAuth().onAuthStateChanged((user) => {
       if (!user) {
-        setUserInfo(null);
+        setIsLoggedIn(false);
+        const auth = getAuth();
+        const provider = new GoogleAuthProvider();
+        signInWithRedirect(auth, provider)
+          .catch((error) => {
+            // eslint-disable-next-line no-alert
+            window.alert(error.message);
+          });
         return;
       }
-      setUserInfo({
-        email: user.email,
-        displayName: user.displayName,
-      });
+      setIsLoggedIn(true);
     });
     // Make sure we un-register Firebase observers when the component unmounts.
     return () => unregisterAuthObserver();
   });
 
+  if (!isLoggedIn) {
+    return null;
+  }
+
   return (
-    <div className="App" style={{ padding: 20 }}>
-      {userInfo ? (
-        <>
-          <p>{`Hi ${userInfo.displayName}`}</p>
-          <Button
-            variant="contained"
-            onClick={() => {
-              const auth = getAuth();
-              signOut(auth)
-                .catch((error) => {
-                  // eslint-disable-next-line no-alert
-                  window.alert(error.message);
-                });
-            }}
-          >
-            Log out
-          </Button>
-        </>
-      ) : <SignIn />}
-    </div>
+    <>
+      <CssBaseline />
+      <Routes>
+        <Route exact path="/" element={<Navigate to="/user" />} />
+        <Route path="/user" element={<LayoutUser />}>
+          <Route path="" element={<UserMenu />} />
+        </Route>
+        <Route path="/admin" element={<LayoutAdmin />}>
+          <Route path="" element={<AdminMenu />} />
+        </Route>
+      </Routes>
+    </>
   );
 };
 
