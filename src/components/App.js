@@ -40,10 +40,6 @@ const App = () => {
 
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
-  if (!isLoggedIn) {
-    return null;
-  }
-
   const theme = React.useMemo(
     () => createTheme({
       palette: {
@@ -52,6 +48,10 @@ const App = () => {
     }),
     [prefersDarkMode],
   );
+
+  if (!isLoggedIn) {
+    return null;
+  }
 
   return (
     <ThemeProvider theme={theme}>
