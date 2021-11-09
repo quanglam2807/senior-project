@@ -6,6 +6,8 @@ import {
   Navigate,
 } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import LayoutUser from './layouts/LayoutUser';
 import LayoutAdmin from './layouts/LayoutAdmin';
@@ -36,12 +38,23 @@ const App = () => {
     return () => unregisterAuthObserver();
   });
 
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
   if (!isLoggedIn) {
     return null;
   }
 
+  const theme = React.useMemo(
+    () => createTheme({
+      palette: {
+        mode: prefersDarkMode ? 'dark' : 'light',
+      },
+    }),
+    [prefersDarkMode],
+  );
+
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <Routes>
         <Route exact path="/" element={<Navigate to="/user" />} />
@@ -52,7 +65,7 @@ const App = () => {
           <Route path="" element={<AdminMenu />} />
         </Route>
       </Routes>
-    </>
+    </ThemeProvider>
   );
 };
 
