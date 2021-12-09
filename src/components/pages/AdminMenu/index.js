@@ -8,7 +8,10 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
-import menuItems from '../../../constants/menuItems';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { getFirestore, collection } from 'firebase/firestore';
+
+import firebaseApp from '../../../firebase-app';
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
@@ -20,6 +23,23 @@ const columns = [
 export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
+  const [value, loading, error] = useCollection(
+    collection(getFirestore(firebaseApp), 'items'),
+    {
+      snapshotListenOptions: { includeMetadataChanges: true },
+    },
+  );
+
+  const menuItems = React.useMemo(() => {
+    if (!loading && !error && value) {
+      return value.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+    }
+
+    return [];
+  }, [value, loading, error]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -53,12 +73,12 @@ export default function StickyHeadTable() {
               .map((row) => (
                 <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                   {columns.map((column) => {
-                    const value = row[column.id];
+                    const v = row[column.id];
                     return (
                       <TableCell key={column.id} align={column.align}>
-                        {column.format && typeof value === 'number'
-                          ? column.format(value)
-                          : value}
+                        {column.format && typeof v === 'number'
+                          ? column.format(v)
+                          : v}
                       </TableCell>
                     );
                   })}

@@ -4,13 +4,32 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { uniq } from 'lodash';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { getFirestore, collection } from 'firebase/firestore';
 
-import menuItems from '../../../constants/menuItems';
+import firebaseApp from '../../../firebase-app';
 
 import ItemCard from './ItemCard';
 
 const BasicTabs = () => {
   const [activeCategory, setActiveCategory] = React.useState('all');
+  const [value, loading, error] = useCollection(
+    collection(getFirestore(firebaseApp), 'items'),
+    {
+      snapshotListenOptions: { includeMetadataChanges: true },
+    },
+  );
+
+  const menuItems = React.useMemo(() => {
+    if (!loading && !error && value) {
+      return value.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+    }
+
+    return [];
+  }, [value, loading, error]);
 
   const handleChange = (event, newValue) => {
     setActiveCategory(newValue);
@@ -19,6 +38,7 @@ const BasicTabs = () => {
   const categories = uniq(menuItems.map((item) => item.category));
 
   let filteredMenuItems = menuItems;
+
   if (activeCategory !== 'all') {
     filteredMenuItems = menuItems.filter((item) => item.category === activeCategory);
   }
@@ -33,6 +53,7 @@ const BasicTabs = () => {
           />
           {categories.map((category) => (
             <Tab
+              key={category}
               value={category}
               label={category}
             />
