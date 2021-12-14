@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { getAuth, signOut } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
@@ -57,6 +58,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar() {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
@@ -118,7 +120,10 @@ export default function PrimarySearchAppBar() {
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
+            sx={{ display: { xs: 'none', sm: 'block' }, cursor: 'pointer' }}
+            onClick={() => {
+              navigate('/');
+            }}
           >
             Marty&apos;s
           </Typography>
@@ -137,6 +142,9 @@ export default function PrimarySearchAppBar() {
               size="large"
               aria-label="check out"
               color="inherit"
+              onClick={() => {
+                navigate('/user/checkout');
+              }}
             >
               <Badge badgeContent={3} color="error">
                 <ShoppingCartIcon />

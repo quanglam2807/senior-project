@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAuth, GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import {
   Routes,
   Route,
@@ -11,26 +11,22 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 import LayoutUser from './layouts/LayoutUser';
 import LayoutAdmin from './layouts/LayoutAdmin';
+import Login from './pages/Login';
 import UserMenu from './pages/UserMenu';
 import UserCheckout from './pages/UserCheckout';
 import AdminMenu from './pages/AdminMenu';
 
 const App = () => {
+  const [initializing, setInitializing] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(Boolean(getAuth().currentUser));
 
   // docs: https://github.com/firebase/firebaseui-web-react
   // Listen to the Firebase Auth state and set the local state.
   useEffect(() => {
     const unregisterAuthObserver = getAuth().onAuthStateChanged((user) => {
+      setInitializing(true);
       if (!user) {
         setIsLoggedIn(false);
-        const auth = getAuth();
-        const provider = new GoogleAuthProvider();
-        signInWithRedirect(auth, provider)
-          .catch((error) => {
-            // eslint-disable-next-line no-alert
-            window.alert(error.message);
-          });
         return;
       }
       setIsLoggedIn(true);
@@ -50,23 +46,25 @@ const App = () => {
     [prefersDarkMode],
   );
 
-  if (!isLoggedIn) {
+  if (!initializing) {
     return null;
   }
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Routes>
-        <Route exact path="/" element={<Navigate to="/user" />} />
-        <Route path="/user" element={<LayoutUser />}>
-          <Route path="" element={<UserMenu />} />
-          <Route path="/user/checkout" element={<UserCheckout />} />
-        </Route>
-        <Route path="/admin" element={<LayoutAdmin />}>
-          <Route path="" element={<AdminMenu />} />
-        </Route>
-      </Routes>
+      {isLoggedIn ? (
+        <Routes>
+          <Route exact path="/" element={<Navigate to="/user" />} />
+          <Route path="/user" element={<LayoutUser />}>
+            <Route path="" element={<UserMenu />} />
+            <Route path="/user/checkout" element={<UserCheckout />} />
+          </Route>
+          <Route path="/admin" element={<LayoutAdmin />}>
+            <Route path="" element={<AdminMenu />} />
+          </Route>
+        </Routes>
+      ) : (<Login />)}
     </ThemeProvider>
   );
 };
