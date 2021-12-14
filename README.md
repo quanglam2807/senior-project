@@ -1,5 +1,9 @@
 # Marty's
-Production URL: https://senior-project-5475e.web.app/
+
+Consumer App: https://senior-project-5475e.web.app/
+Admin App: https://senior-project-5475e.web.app/admin
+
+The app can be installed as mobile or desktop app as [Progressive Web App](https://en.wikipedia.org/wiki/Progressive_web_application).
 
 ## Team
 - Quang Lam
