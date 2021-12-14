@@ -5,26 +5,31 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 
-export default function FullWidthTabs() {
-  const [value, setValue] = React.useState(0);
+import { useNavigate, useLocation } from 'react-router-dom';
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+export default function FullWidthTabs() {
+  const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <>
       <Box>
         <AppBar position="static">
           <Tabs
-            value={value}
-            onChange={handleChange}
+            value={location.pathname.startsWith('/admin/menu') ? 'menu' : 'orders'}
+            onChange={(_, value) => {
+              if (value === 'orders') {
+                navigate('/admin');
+                return;
+              }
+              navigate('/admin/menu');
+            }}
             indicatorColor="secondary"
             textColor="inherit"
             centered
           >
-            <Tab label="Orders" />
-            <Tab label="Menu" />
+            <Tab value="orders" label="Orders" />
+            <Tab value="menu" label="Menu" />
           </Tabs>
         </AppBar>
       </Box>

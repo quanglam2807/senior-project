@@ -15,6 +15,7 @@ import Login from './pages/Login';
 import UserMenu from './pages/UserMenu';
 import UserCheckout from './pages/UserCheckout';
 import AdminMenu from './pages/AdminMenu';
+import AdminOrders from './pages/AdminOrders';
 
 const App = () => {
   const [initializing, setInitializing] = useState(false);
@@ -61,7 +62,8 @@ const App = () => {
             <Route path="/user/checkout" element={<UserCheckout />} />
           </Route>
           <Route path="/admin" element={<LayoutAdmin />}>
-            <Route path="" element={<AdminMenu />} />
+            <Route path="" element={<AdminOrders />} />
+            <Route path="/admin/menu" element={<AdminMenu />} />
           </Route>
         </Routes>
       ) : (<Login />)}
