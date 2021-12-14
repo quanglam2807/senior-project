@@ -4,6 +4,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 
 const products = [
   {
@@ -37,7 +38,7 @@ const payments = [
 ];
 
 const Review = () => (
-  <>
+  <Box sx={{ m: 4 }}>
     <Typography variant="h6" gutterBottom>
       Order summary
     </Typography>
@@ -82,9 +83,7 @@ const Review = () => (
         </Grid>
       </Grid>
     </Grid>
-  </>
+  </Box>
 );
 
 export default Review;
-
-// JSX
