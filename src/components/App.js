@@ -12,6 +12,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import LayoutUser from './layouts/LayoutUser';
 import LayoutAdmin from './layouts/LayoutAdmin';
 import UserMenu from './pages/UserMenu';
+import UserCheckout from './pages/UserCheckout';
 import AdminMenu from './pages/AdminMenu';
 
 const App = () => {
@@ -60,6 +61,7 @@ const App = () => {
         <Route exact path="/" element={<Navigate to="/user" />} />
         <Route path="/user" element={<LayoutUser />}>
           <Route path="" element={<UserMenu />} />
+          <Route path="/user/checkout" element={<UserCheckout />} />
         </Route>
         <Route path="/admin" element={<LayoutAdmin />}>
           <Route path="" element={<AdminMenu />} />
