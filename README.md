@@ -37,6 +37,11 @@ yarn
   - For example, file stored at `public/hello.jpg` can be accessed from the app at `/hello.jpg`.
 - `.github`: the configurations for GitHub Actions.
 
+## Library Documentation
+- React (front-end library): https://reactjs.org/
+- MUI v5 (UI library for React): https://mui.com/
+- react-router v6: https://reactrouter.com/
+
 ## Development Cycle
 The source code is stored on GitHub.
 
