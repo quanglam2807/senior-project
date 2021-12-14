@@ -20,6 +20,7 @@
     "react-firebase-hooks": "^4.0.1",
     "react-router-dom": "^6.1.1",
     "react-scripts": "4.0.3",
+    "uuid": "^8.3.2",
     "workbox-background-sync": "^5.1.4",
     "workbox-broadcast-update": "^5.1.4",
     "workbox-cacheable-response": "^5.1.4",
