@@ -12,14 +12,14 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 
-import { doc, setDoc, getFirestore } from 'firebase/firestore';
-
-import { v4 as uuidv4 } from 'uuid';
+import {
+  doc, updateDoc, getFirestore, getDoc,
+} from 'firebase/firestore';
 
 import '../../../firebase-app';
 import menuCategories from '../../../constants/menuCategories';
 
-const DialogAdd = ({ open, setOpen }) => {
+const DialogEdit = ({ open, setOpen, id }) => {
   const [form, setForm] = React.useState({
     category: menuCategories[0],
   });
@@ -28,9 +28,25 @@ const DialogAdd = ({ open, setOpen }) => {
     setOpen(false);
   };
 
+  React.useEffect(() => {
+    if (!id) return;
+
+    const docRef = doc(getFirestore(), 'items', id);
+
+    (async () => {
+      try {
+        const docSnap = await getDoc(docRef);
+        const data = docSnap.data();
+        setForm(data);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, [id, open, setForm]);
+
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-      <DialogTitle>Add Menu Items</DialogTitle>
+      <DialogTitle>Edit Item</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
@@ -94,26 +110,31 @@ const DialogAdd = ({ open, setOpen }) => {
         <Button onClick={handleClose}>Cancel</Button>
         <Button
           onClick={async () => {
-            const id = uuidv4();
-            const newItem = { ...form };
-            delete newItem.image;
+            const updatedForm = { ...form };
+            delete updatedForm.image;
 
-            await setDoc(doc(getFirestore(), 'items', id), newItem);
+            const docRef = doc(getFirestore(), 'items', id);
+            await updateDoc(docRef, updatedForm);
 
             handleClose();
           }}
           disabled={!form.name || !form.price || !form.calories || !form.category}
         >
-          Add
+          Save
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-DialogAdd.propTypes = {
+DialogEdit.defaultProps = {
+  id: null,
+};
+
+DialogEdit.propTypes = {
   open: PropTypes.bool.isRequired,
+  id: PropTypes.string,
   setOpen: PropTypes.func.isRequired,
 };
 
-export default DialogAdd;
+export default DialogEdit;
