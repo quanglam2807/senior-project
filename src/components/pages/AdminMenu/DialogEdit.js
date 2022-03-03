@@ -39,6 +39,7 @@ const DialogEdit = ({ open, setOpen, id }) => {
         const data = docSnap.data();
         setForm(data);
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.log(err);
       }
     })();
