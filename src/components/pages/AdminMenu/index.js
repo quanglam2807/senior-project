@@ -17,6 +17,7 @@ import { getFirestore, collection } from 'firebase/firestore';
 import firebaseApp from '../../../firebase-app';
 
 import DialogAdd from './DialogAdd';
+import DialogEdit from './DialogEdit';
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
@@ -27,6 +28,8 @@ const columns = [
 
 export default function StickyHeadTable() {
   const [openDialogAdd, setOpenDialogAdd] = React.useState(false);
+  const [idDialogEdit, setIdDialogEdit] = React.useState(null);
+  const [openDialogEdit, setOpenDialogEdit] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
   const [value, loading, error] = useCollection(
@@ -74,11 +77,21 @@ export default function StickyHeadTable() {
                 ))}
               </TableRow>
             </TableHead>
+            <DialogEdit open={openDialogEdit} setOpen={setOpenDialogEdit} id={idDialogEdit} />
             <TableBody>
               {menuItems
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    tabIndex={-1}
+                    key={row.id}
+                    onClick={() => {
+                      setIdDialogEdit(row.id);
+                      setOpenDialogEdit(true);
+                    }}
+                  >
                     {columns.map((column) => {
                       const v = row[column.id];
                       return (
