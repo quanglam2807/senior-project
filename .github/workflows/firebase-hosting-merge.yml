@@ -14,6 +14,8 @@ jobs:
       - run: yarn install --prefer-offline --network-timeout 600000
       - run: yarn lint
       - run: yarn build
+      - name: Set up Firebase CLI
+        run: yarn global add firebase-tools
       - run: firebase deploy
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
