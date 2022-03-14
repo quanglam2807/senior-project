@@ -1,7 +1,6 @@
 # Marty's
 
 - Consumer App: https://martys.quanglam2807.com/
-
 - Admin App: https://martys.quanglam2807.com/admin
 
 The app can be installed as mobile or desktop app as [Progressive Web App](https://en.wikipedia.org/wiki/Progressive_web_application).
