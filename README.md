@@ -1,7 +1,7 @@
 # Marty's
 
-Consumer App: https://martys.quanglam2807.com/
-Admin App: https://martys.quanglam2807.com/admin
+- Consumer App: https://martys.quanglam2807.com/
+- Admin App: https://martys.quanglam2807.com/admin
 
 The app can be installed as mobile or desktop app as [Progressive Web App](https://en.wikipedia.org/wiki/Progressive_web_application).
 
@@ -39,7 +39,13 @@ yarn
   - `images`: images files.
 - `public`: the static files.
   - For example, file stored at `public/hello.jpg` can be accessed from the app at `/hello.jpg`.
+- `functions`: backend code (cloud functions).
+- `firebase.json`: deployment configurations for Firebase.
+- `firestore.rules`: security rules for Firestore.
+- `storage.rules`: security rules for Cloud Storage.
 - `.github`: the configurations for GitHub Actions.
+  - `firebase-hosting-merge.yml`: script to run when a commit is merged into the `master` branch.
+  - `firebase-hosting-pull-request.yml`: script to run when a PR is created or changed.
 
 ## Library Documentation
 - React (front-end library): https://reactjs.org/
