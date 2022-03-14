@@ -41,7 +41,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint ./src && yarn lint:functions",
-    "lint:functions": "cd functions && yarn lint:functions",
+    "lint:functions": "cd functions && yarn lint",
     "build:functions": "cd functions && yarn build"
   },
   "eslintConfig": {
