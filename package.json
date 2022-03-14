@@ -35,11 +35,14 @@
     "workbox-streams": "^5.1.4"
   },
   "scripts": {
+    "postinstall": "cd functions && yarn install",
     "start": "ESLINT_NO_DEV_ERRORS=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src && yarn lint:functions",
+    "lint:functions": "cd functions && yarn lint:functions",
+    "build:functions": "cd functions && yarn build"
   },
   "eslintConfig": {
     "extends": [
