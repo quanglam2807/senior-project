@@ -81,7 +81,7 @@ const BasicTabs = () => {
       return searchResults.filter((item) => item.category === activeCategory);
     }
     return searchResults;
-  }, [searchResults, searchQuery]);
+  }, [searchResults, activeCategory, searchQuery]);
 
   return (
     <Box
