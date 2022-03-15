@@ -1,6 +1,6 @@
 import React from 'react';
 import { getAuth, signOut } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { PropTypes } from 'prop-types';
 
@@ -62,6 +62,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const PrimarySearchAppBar = ({ admin }) => {
+  const location = useLocation();
   const count = useSelector((state) => state.cart.items.length);
   const searchQuery = useSelector((state) => state.search.query);
   const dispatch = useDispatch();
@@ -135,17 +136,19 @@ const PrimarySearchAppBar = ({ admin }) => {
           >
             {admin ? 'Marty\'s AdminCP' : 'Marty\'s'}
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-              value={searchQuery}
-              onChange={(e) => dispatch(updateQuery(e.target.value))}
-            />
-          </Search>
+          {location.pathname === '/user' && (
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+                value={searchQuery}
+                onChange={(e) => dispatch(updateQuery(e.target.value))}
+              />
+            </Search>
+          )}
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: 'flex' }}>
             {!admin && (

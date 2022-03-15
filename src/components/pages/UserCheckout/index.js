@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { useSelector, useDispatch } from 'react-redux';
 import { useCollection } from 'react-firebase-hooks/firestore';
+import { useNavigate } from 'react-router-dom';
 import {
   getFirestore, collection, doc, setDoc, Timestamp,
 } from 'firebase/firestore';
@@ -23,6 +24,7 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 });
 
 const UserCheckout = () => {
+  const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
@@ -95,6 +97,7 @@ const UserCheckout = () => {
             });
             dispatch(clearItems());
             enqueueSnackbar('Ordered successfully! We will notify you when the order is ready.', { variant: 'success' });
+            navigate('/user/orders');
           }}
         >
           Make Order
