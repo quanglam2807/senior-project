@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useMemo } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,6 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
+import { Helmet } from 'react-helmet';
 
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { getFirestore, collection } from 'firebase/firestore';
@@ -27,11 +28,11 @@ const columns = [
 ];
 
 export default function StickyHeadTable() {
-  const [openDialogAdd, setOpenDialogAdd] = React.useState(false);
-  const [idDialogEdit, setIdDialogEdit] = React.useState(null);
-  const [openDialogEdit, setOpenDialogEdit] = React.useState(false);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(25);
+  const [openDialogAdd, setOpenDialogAdd] = useState(false);
+  const [idDialogEdit, setIdDialogEdit] = useState(null);
+  const [openDialogEdit, setOpenDialogEdit] = useState(false);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
   const [value, loading, error] = useCollection(
     collection(getFirestore(firebaseApp), 'items'),
     {
@@ -39,7 +40,7 @@ export default function StickyHeadTable() {
     },
   );
 
-  const menuItems = React.useMemo(() => {
+  const menuItems = useMemo(() => {
     if (!loading && !error && value) {
       return value.docs.map((doc) => ({
         id: doc.id,
@@ -60,9 +61,27 @@ export default function StickyHeadTable() {
   };
 
   return (
-    <Box>
-      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <TableContainer sx={{ maxHeight: 'calc(100vh - 100px)' }}>
+    <Box
+      sx={{
+        flex: 1,
+        width: '100%',
+        overflow: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <Helmet>
+        <title>Menu</title>
+      </Helmet>
+      <Paper
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
+          overflow: 'hidden',
+        }}
+      >
+        <TableContainer sx={{ flex: 1 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
@@ -125,6 +144,7 @@ export default function StickyHeadTable() {
           position: 'absolute',
           bottom: 16,
           right: 16,
+          zIndex: 200,
         }}
         onClick={() => setOpenDialogAdd(true)}
       >

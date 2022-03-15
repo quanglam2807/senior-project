@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { getAuth } from 'firebase/auth';
 import {
   Routes,
@@ -8,6 +8,7 @@ import {
 import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { Helmet } from 'react-helmet';
 
 import LayoutUser from './layouts/LayoutUser';
 import LayoutAdmin from './layouts/LayoutAdmin';
@@ -38,7 +39,7 @@ const App = () => {
 
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
-  const theme = React.useMemo(
+  const theme = useMemo(
     () => createTheme({
       palette: {
         mode: prefersDarkMode ? 'dark' : 'light',
@@ -53,6 +54,9 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <Helmet
+        titleTemplate="%s | Marty's"
+      />
       <CssBaseline />
       {isLoggedIn ? (
         <Routes>

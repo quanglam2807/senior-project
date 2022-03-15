@@ -7,35 +7,54 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-import itemIcon from '../../../images/amirali-mirhashemian-sc5sTPMrVfk-unsplash.jpg';
+import { useDispatch } from 'react-redux';
+import { addItem } from '../../../reducers/cart';
 
-const ItemCard = ({ name, price, calories }) => (
-  <Card>
-    <CardMedia
-      component="img"
-      height="140"
-      image={itemIcon}
-      alt={name}
-    />
-    <CardContent>
-      <Typography gutterBottom variant="h5" component="div">
-        {name}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        {`$${price} | ${calories} calories`}
-      </Typography>
-    </CardContent>
-    <CardActions>
-      <Button size="small">Add to Cart</Button>
-    </CardActions>
-  </Card>
-);
+import itemImageDefault from '../../../images/1600x900.png';
+
+const ItemCard = ({
+  id, name, price, calories, image,
+}) => {
+  const dispatch = useDispatch();
+
+  return (
+    <Card>
+      <CardMedia
+        component="img"
+        image={image}
+        alt={name}
+        sx={{ aspectRatio: '16/9' }}
+      />
+      <CardContent>
+        <Typography gutterBottom variant="h6" component="h6" noWrap>
+          {name}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {`$${price} | ${calories} calories`}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button
+          size="small"
+          onClick={() => dispatch(addItem(id))}
+        >
+          Add to Cart
+        </Button>
+      </CardActions>
+    </Card>
+  );
+};
+
+ItemCard.defaultProps = {
+  image: itemImageDefault,
+};
 
 ItemCard.propTypes = {
-  // id: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   calories: PropTypes.number.isRequired,
+  image: PropTypes.string,
 };
 
 export default ItemCard;

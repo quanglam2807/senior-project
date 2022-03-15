@@ -2,6 +2,7 @@ const menuCategories = [
   'Burgers',
   'Chicken',
   'Sandwiches',
+  'Salads',
   'Side Orders',
   'Drinks',
 ];
