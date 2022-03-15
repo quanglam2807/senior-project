@@ -11,6 +11,7 @@ import {
 } from 'firebase/storage';
 import * as JsSearch from 'js-search';
 import { useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
 
 import ItemCard from './ItemCard';
 
@@ -93,6 +94,9 @@ const BasicTabs = () => {
         overflow: 'hidden',
       }}
     >
+      <Helmet>
+        <title>Menu</title>
+      </Helmet>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         {searchQuery ? (
           <Tabs value="search" onChange={null} aria-label="Categories">

@@ -8,6 +8,7 @@ import {
 import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { Helmet } from 'react-helmet';
 
 import LayoutUser from './layouts/LayoutUser';
 import LayoutAdmin from './layouts/LayoutAdmin';
@@ -53,6 +54,9 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <Helmet
+        titleTemplate="%s | Marty's"
+      />
       <CssBaseline />
       {isLoggedIn ? (
         <Routes>

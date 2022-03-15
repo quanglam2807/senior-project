@@ -10,6 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
+import { Helmet } from 'react-helmet';
 
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { getFirestore, collection } from 'firebase/firestore';
@@ -69,6 +70,9 @@ export default function StickyHeadTable() {
         flexDirection: 'column',
       }}
     >
+      <Helmet>
+        <title>Menu</title>
+      </Helmet>
       <Paper
         sx={{
           display: 'flex',

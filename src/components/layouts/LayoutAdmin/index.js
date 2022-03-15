@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import Box from '@mui/material/Box';
+import { Helmet } from 'react-helmet';
 
 import AppBar from '../../shared/AppBar';
 import BottomNav from './BottomNav';
@@ -37,6 +38,9 @@ const LayoutAdmin = () => {
         overflow: 'hidden',
       }}
     >
+      <Helmet
+        titleTemplate="%s | Marty's AdminCP"
+      />
       <AppBar admin />
       <Outlet />
       <BottomNav />
