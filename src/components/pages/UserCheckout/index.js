@@ -5,9 +5,16 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useCollection } from 'react-firebase-hooks/firestore';
-import { getFirestore, collection } from 'firebase/firestore';
+import {
+  getFirestore, collection, doc, setDoc,
+} from 'firebase/firestore';
+import { v4 as uuidv4 } from 'uuid';
+import { getAuth } from 'firebase/auth';
+import { useSnackbar } from 'notistack';
+
+import { clearItems } from '../../../reducers/cart';
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -16,6 +23,8 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 
 const UserCheckout = () => {
   const cartItems = useSelector((state) => state.cart.items);
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [value, loading, error] = useCollection(
     collection(getFirestore(), 'items'),
@@ -26,9 +35,9 @@ const UserCheckout = () => {
 
   const menuItems = useMemo(() => {
     if (!loading && !error && value) {
-      return value.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
+      return value.docs.map((_doc) => ({
+        id: _doc.id,
+        ..._doc.data(),
       }));
     }
 
@@ -68,7 +77,23 @@ const UserCheckout = () => {
       </List>
 
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', py: 2 }}>
-        <Button variant="contained" size="large">Make Order</Button>
+        <Button
+          variant="contained"
+          size="large"
+          disabled={detailedCartItems.length < 1}
+          onClick={async () => {
+            const orderId = uuidv4();
+            await setDoc(doc(getFirestore(), 'orders', orderId), {
+              cartItems,
+              status: 'pending',
+              uid: getAuth().currentUser.uid,
+            });
+            dispatch(clearItems());
+            enqueueSnackbar('Ordered successfully! We will notify you when the order is ready.', { variant: 'success' });
+          }}
+        >
+          Make Order
+        </Button>
       </Box>
     </Box>
   );
