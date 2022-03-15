@@ -1,6 +1,10 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+  	match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false;
+    }
   	match /items/{appId} {
       allow read: if request.auth != null;
       // allow writing if the user has 'role' field set to 'admin'
