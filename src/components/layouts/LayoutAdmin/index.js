@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import Box from '@mui/material/Box';
 
-import TabBar from './TabBar';
+import AppBar from '../../shared/AppBar';
+import BottomNav from './BottomNav';
 
 const LayoutAdmin = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -18,13 +20,27 @@ const LayoutAdmin = () => {
     })();
   }, []);
 
-  if (!isAdmin) return 'Access denied';
+  if (!isAdmin) {
+    return (
+      <Box sx={{ p: 2 }}>
+        Access denied.
+      </Box>
+    );
+  }
 
   return (
-    <>
-      <TabBar />
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
+        overflow: 'hidden',
+      }}
+    >
+      <AppBar admin />
       <Outlet />
-    </>
+      <BottomNav />
+    </Box>
   );
 };
 

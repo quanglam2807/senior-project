@@ -1,7 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { PropTypes } from 'prop-types';
 
 // import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
@@ -58,7 +59,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 //   },
 // }));
 
-const PrimarySearchAppBar = () => {
+const PrimarySearchAppBar = ({ admin }) => {
   const count = useSelector((state) => state.cart.items.length);
 
   const navigate = useNavigate();
@@ -107,7 +108,7 @@ const PrimarySearchAppBar = () => {
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box>
       <AppBar position="static">
         <Toolbar>
           {/* <IconButton
@@ -125,10 +126,10 @@ const PrimarySearchAppBar = () => {
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' }, cursor: 'pointer' }}
             onClick={() => {
-              navigate('/');
+              navigate(admin ? '/admin' : '/');
             }}
           >
-            Marty&apos;s
+            {admin ? 'Marty\'s AdminCP' : 'Marty\'s'}
           </Typography>
           {/* <Search>
             <SearchIconWrapper>
@@ -141,18 +142,20 @@ const PrimarySearchAppBar = () => {
           </Search> */}
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: 'flex' }}>
-            <IconButton
-              size="large"
-              aria-label="check out"
-              color="inherit"
-              onClick={() => {
-                navigate('/user/checkout');
-              }}
-            >
-              <Badge badgeContent={count} color="error">
-                <ShoppingCartIcon />
-              </Badge>
-            </IconButton>
+            {!admin && (
+              <IconButton
+                size="large"
+                aria-label="check out"
+                color="inherit"
+                onClick={() => {
+                  navigate('/user/checkout');
+                }}
+              >
+                <Badge badgeContent={count} color="error">
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+            )}
             <IconButton
               size="large"
               edge="end"
@@ -170,6 +173,14 @@ const PrimarySearchAppBar = () => {
       {renderMenu}
     </Box>
   );
+};
+
+PrimarySearchAppBar.defaultProps = {
+  admin: false,
+};
+
+PrimarySearchAppBar.propTypes = {
+  admin: PropTypes.bool,
 };
 
 export default PrimarySearchAppBar;

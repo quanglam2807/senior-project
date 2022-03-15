@@ -60,9 +60,24 @@ export default function StickyHeadTable() {
   };
 
   return (
-    <Box>
-      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <TableContainer sx={{ maxHeight: 'calc(100vh - 100px)' }}>
+    <Box
+      sx={{
+        flex: 1,
+        width: '100%',
+        overflow: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <Paper
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
+          overflow: 'hidden',
+        }}
+      >
+        <TableContainer sx={{ flex: 1 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
@@ -125,6 +140,7 @@ export default function StickyHeadTable() {
           position: 'absolute',
           bottom: 16,
           right: 16,
+          zIndex: 200,
         }}
         onClick={() => setOpenDialogAdd(true)}
       >

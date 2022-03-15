@@ -66,7 +66,15 @@ const BasicTabs = () => {
   }
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box
+      sx={{
+        width: '100%',
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+      }}
+    >
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={activeCategory} onChange={handleChange} aria-label="basic tabs example">
           <Tab
@@ -82,7 +90,7 @@ const BasicTabs = () => {
           ))}
         </Tabs>
       </Box>
-      <Box sx={{ m: '2rem' }}>
+      <Box sx={{ flex: 1, p: 2, overflow: 'auto' }}>
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 16 }}>
           {filteredMenuItems.map((item) => (
             <Grid item xs={2} sm={4} md={4} key={item.id}>

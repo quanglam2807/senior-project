@@ -56,7 +56,7 @@ const UserCheckout = () => {
     .reduce((partialSum, a) => partialSum + a.menuItem.price, 0), [detailedCartItems]);
 
   return (
-    <Box sx={{ m: 4 }}>
+    <Box sx={{ flex: 1, p: 4, overflow: 'auto' }}>
       <Typography variant="h6" gutterBottom>
         Order summary
       </Typography>
