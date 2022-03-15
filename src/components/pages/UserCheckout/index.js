@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import { useSelector, useDispatch } from 'react-redux';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import {
-  getFirestore, collection, doc, setDoc,
+  getFirestore, collection, doc, setDoc, Timestamp,
 } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { getAuth } from 'firebase/auth';
@@ -91,6 +91,7 @@ const UserCheckout = () => {
               cartItems,
               status: 'pending',
               uid: getAuth().currentUser.uid,
+              orderAt: Timestamp.now(),
             });
             dispatch(clearItems());
             enqueueSnackbar('Ordered successfully! We will notify you when the order is ready.', { variant: 'success' });

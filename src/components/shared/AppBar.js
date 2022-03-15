@@ -9,6 +9,7 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
@@ -111,7 +112,7 @@ const PrimarySearchAppBar = ({ admin }) => {
   );
 
   return (
-    <Box>
+    <Box sx={{ zIndex: 100 }}>
       <AppBar position="static">
         <Toolbar>
           {/* <IconButton
@@ -148,18 +149,29 @@ const PrimarySearchAppBar = ({ admin }) => {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: 'flex' }}>
             {!admin && (
-              <IconButton
-                size="large"
-                aria-label="check out"
-                color="inherit"
-                onClick={() => {
-                  navigate('/user/checkout');
-                }}
-              >
-                <Badge badgeContent={count} color="error">
-                  <ShoppingCartIcon />
-                </Badge>
-              </IconButton>
+              <>
+                <Button
+                  size="large"
+                  color="inherit"
+                  onClick={() => {
+                    navigate('/user/orders');
+                  }}
+                >
+                  My Orders
+                </Button>
+                <IconButton
+                  size="large"
+                  aria-label="check out"
+                  color="inherit"
+                  onClick={() => {
+                    navigate('/user/checkout');
+                  }}
+                >
+                  <Badge badgeContent={count} color="error">
+                    <ShoppingCartIcon />
+                  </Badge>
+                </IconButton>
+              </>
             )}
             <IconButton
               size="large"

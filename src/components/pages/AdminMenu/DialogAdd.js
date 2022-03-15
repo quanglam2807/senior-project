@@ -18,7 +18,6 @@ import { getStorage, ref, uploadBytes } from 'firebase/storage';
 
 import { v4 as uuidv4 } from 'uuid';
 
-import '../../../firebase-app';
 import menuCategories from '../../../constants/menuCategories';
 
 import itemImageDefault from '../../../images/1600x900.png';

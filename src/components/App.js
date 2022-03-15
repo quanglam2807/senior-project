@@ -15,6 +15,7 @@ import LayoutAdmin from './layouts/LayoutAdmin';
 import Login from './pages/Login';
 import UserMenu from './pages/UserMenu';
 import UserCheckout from './pages/UserCheckout';
+import UserOrders from './pages/UserOrders';
 import AdminMenu from './pages/AdminMenu';
 import AdminOrders from './pages/AdminOrders';
 
@@ -49,7 +50,7 @@ const App = () => {
   );
 
   if (!initializing) {
-    return null;
+    return (<div />);
   }
 
   return (
@@ -64,6 +65,7 @@ const App = () => {
           <Route path="/user" element={<LayoutUser />}>
             <Route path="" element={<UserMenu />} />
             <Route path="/user/checkout" element={<UserCheckout />} />
+            <Route path="/user/orders" element={<UserOrders />} />
           </Route>
           <Route path="/admin" element={<LayoutAdmin />}>
             <Route path="" element={<AdminOrders />} />

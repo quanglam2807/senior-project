@@ -20,7 +20,6 @@ import {
   getStorage, ref, uploadBytes, getDownloadURL,
 } from 'firebase/storage';
 
-import '../../../firebase-app';
 import menuCategories from '../../../constants/menuCategories';
 
 import itemImageDefault from '../../../images/1600x900.png';

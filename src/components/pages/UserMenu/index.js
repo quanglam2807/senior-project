@@ -92,6 +92,7 @@ const BasicTabs = () => {
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
+        bgcolor: 'grey.100',
       }}
     >
       <Helmet>
