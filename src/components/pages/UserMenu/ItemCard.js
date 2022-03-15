@@ -8,12 +8,12 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import { useDispatch } from 'react-redux';
-import { increment } from '../../../reducers/counter';
+import { addItem } from '../../../reducers/cart';
 
 import itemImageDefault from '../../../images/1600x900.png';
 
 const ItemCard = ({
-  name, price, calories, image,
+  id, name, price, calories, image,
 }) => {
   const dispatch = useDispatch();
 
@@ -36,7 +36,7 @@ const ItemCard = ({
       <CardActions>
         <Button
           size="small"
-          onClick={() => dispatch(increment())}
+          onClick={() => dispatch(addItem(id))}
         >
           Add to Cart
         </Button>
@@ -50,7 +50,7 @@ ItemCard.defaultProps = {
 };
 
 ItemCard.propTypes = {
-  // id: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   calories: PropTypes.number.isRequired,
