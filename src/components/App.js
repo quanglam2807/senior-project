@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { getAuth } from 'firebase/auth';
 import {
   Routes,
@@ -38,7 +38,7 @@ const App = () => {
 
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
-  const theme = React.useMemo(
+  const theme = useMemo(
     () => createTheme({
       palette: {
         mode: prefersDarkMode ? 'dark' : 'light',
