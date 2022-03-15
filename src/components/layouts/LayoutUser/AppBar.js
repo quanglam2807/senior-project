@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 // import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
@@ -57,7 +58,9 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 //   },
 // }));
 
-export default function PrimarySearchAppBar() {
+const PrimarySearchAppBar = () => {
+  const count = useSelector((state) => state.counter.value);
+
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -146,7 +149,7 @@ export default function PrimarySearchAppBar() {
                 navigate('/user/checkout');
               }}
             >
-              <Badge badgeContent={3} color="error">
+              <Badge badgeContent={count} color="error">
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
@@ -167,4 +170,6 @@ export default function PrimarySearchAppBar() {
       {renderMenu}
     </Box>
   );
-}
+};
+
+export default PrimarySearchAppBar;

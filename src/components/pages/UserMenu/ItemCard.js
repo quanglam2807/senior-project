@@ -7,31 +7,43 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
+import { useDispatch } from 'react-redux';
+import { increment } from '../../../reducers/counter';
+
 import itemImageDefault from '../../../images/1600x900.png';
 
 const ItemCard = ({
   name, price, calories, image,
-}) => (
-  <Card>
-    <CardMedia
-      component="img"
-      image={image}
-      alt={name}
-      sx={{ aspectRatio: '16/9' }}
-    />
-    <CardContent>
-      <Typography gutterBottom variant="h6" component="h6" noWrap>
-        {name}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        {`$${price} | ${calories} calories`}
-      </Typography>
-    </CardContent>
-    <CardActions>
-      <Button size="small">Add to Cart</Button>
-    </CardActions>
-  </Card>
-);
+}) => {
+  const dispatch = useDispatch();
+
+  return (
+    <Card>
+      <CardMedia
+        component="img"
+        image={image}
+        alt={name}
+        sx={{ aspectRatio: '16/9' }}
+      />
+      <CardContent>
+        <Typography gutterBottom variant="h6" component="h6" noWrap>
+          {name}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {`$${price} | ${calories} calories`}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button
+          size="small"
+          onClick={() => dispatch(increment())}
+        >
+          Add to Cart
+        </Button>
+      </CardActions>
+    </Card>
+  );
+};
 
 ItemCard.defaultProps = {
   image: itemImageDefault,
