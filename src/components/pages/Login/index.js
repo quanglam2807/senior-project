@@ -1,5 +1,6 @@
 import React from 'react';
 import { getAuth, GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
+import { Helmet } from 'react-helmet';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -13,7 +14,10 @@ const Login = () => (
       height: '100vh',
     }}
   >
-    <div>
+    <Helmet>
+      <title>Sign In</title>
+    </Helmet>
+    <Box>
       <Button
         variant="contained"
         size="large"
@@ -29,7 +33,7 @@ const Login = () => (
       >
         Sign in with Luther account
       </Button>
-    </div>
+    </Box>
   </Box>
 );
 

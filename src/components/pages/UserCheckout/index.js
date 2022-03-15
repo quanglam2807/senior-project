@@ -13,6 +13,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { getAuth } from 'firebase/auth';
 import { useSnackbar } from 'notistack';
+import { Helmet } from 'react-helmet';
 
 import { clearItems } from '../../../reducers/cart';
 
@@ -57,6 +58,9 @@ const UserCheckout = () => {
 
   return (
     <Box sx={{ flex: 1, p: 4, overflow: 'auto' }}>
+      <Helmet>
+        <title>Checkout</title>
+      </Helmet>
       <Typography variant="h6" gutterBottom>
         Order summary
       </Typography>
