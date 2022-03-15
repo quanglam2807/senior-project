@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
@@ -6,13 +6,17 @@ import Grid from '@mui/material/Grid';
 import { uniq } from 'lodash';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { getFirestore, collection } from 'firebase/firestore';
+import {
+  getStorage, ref, getDownloadURL,
+} from 'firebase/storage';
 
 import firebaseApp from '../../../firebase-app';
 
 import ItemCard from './ItemCard';
 
 const BasicTabs = () => {
-  const [activeCategory, setActiveCategory] = React.useState('all');
+  const [images, setImages] = useState({});
+  const [activeCategory, setActiveCategory] = useState('all');
   const [value, loading, error] = useCollection(
     collection(getFirestore(firebaseApp), 'items'),
     {
@@ -20,7 +24,7 @@ const BasicTabs = () => {
     },
   );
 
-  const menuItems = React.useMemo(() => {
+  const menuItems = useMemo(() => {
     if (!loading && !error && value) {
       return value.docs.map((doc) => ({
         id: doc.id,
@@ -31,11 +35,31 @@ const BasicTabs = () => {
     return [];
   }, [value, loading, error]);
 
+  useEffect(() => {
+    (async () => {
+      const newImages = {};
+      await Promise.all(menuItems.map(async (item) => {
+        if (newImages[item.id]) return;
+
+        const imagePath = `items/${item.id}.jpg`;
+        const storageRef = ref(getStorage(), imagePath);
+        const imageUrl = await getDownloadURL(storageRef);
+        newImages[item.id] = imageUrl;
+      }));
+
+      setImages(newImages);
+    })();
+  }, [menuItems, setImages]);
+
   const handleChange = (event, newValue) => {
     setActiveCategory(newValue);
   };
 
-  const categories = uniq(menuItems.map((item) => item.category));
+  const categories = useMemo(() => {
+    const newCategories = uniq(menuItems.map((item) => item.category));
+    newCategories.sort();
+    return newCategories;
+  }, [menuItems]);
 
   let filteredMenuItems = menuItems;
 
@@ -69,6 +93,7 @@ const BasicTabs = () => {
                 name={item.name}
                 price={item.price}
                 calories={item.calories}
+                image={images[item.id]}
               />
             </Grid>
           ))}

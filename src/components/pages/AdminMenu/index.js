@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useMemo } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -27,11 +27,11 @@ const columns = [
 ];
 
 export default function StickyHeadTable() {
-  const [openDialogAdd, setOpenDialogAdd] = React.useState(false);
-  const [idDialogEdit, setIdDialogEdit] = React.useState(null);
-  const [openDialogEdit, setOpenDialogEdit] = React.useState(false);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(25);
+  const [openDialogAdd, setOpenDialogAdd] = useState(false);
+  const [idDialogEdit, setIdDialogEdit] = useState(null);
+  const [openDialogEdit, setOpenDialogEdit] = useState(false);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
   const [value, loading, error] = useCollection(
     collection(getFirestore(firebaseApp), 'items'),
     {
@@ -39,7 +39,7 @@ export default function StickyHeadTable() {
     },
   );
 
-  const menuItems = React.useMemo(() => {
+  const menuItems = useMemo(() => {
     if (!loading && !error && value) {
       return value.docs.map((doc) => ({
         id: doc.id,

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { PropTypes } from 'prop-types';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -11,33 +11,67 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 import {
   doc, updateDoc, getFirestore, getDoc,
 } from 'firebase/firestore';
+import {
+  getStorage, ref, uploadBytes, getDownloadURL,
+} from 'firebase/storage';
 
 import '../../../firebase-app';
 import menuCategories from '../../../constants/menuCategories';
 
+import itemImageDefault from '../../../images/1600x900.png';
+
+const defaultForm = {
+  category: menuCategories[0],
+};
+
 const DialogEdit = ({ open, setOpen, id }) => {
-  const [form, setForm] = React.useState({
-    category: menuCategories[0],
-  });
+  const [form, setForm] = useState(defaultForm);
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(itemImageDefault);
+
+  useEffect(() => {
+    if (!image) {
+      return () => {};
+    }
+
+    if (typeof image === 'string') {
+      setImagePreview(image);
+      return () => {};
+    }
+
+    // create the preview
+    const objectUrl = URL.createObjectURL(image);
+    setImagePreview(objectUrl);
+
+    // free memory when ever this component is unmounted
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [image, setImagePreview]);
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!id) return;
 
-    const docRef = doc(getFirestore(), 'items', id);
+    setForm(defaultForm);
 
     (async () => {
       try {
+        const docRef = doc(getFirestore(), 'items', id);
         const docSnap = await getDoc(docRef);
         const data = docSnap.data();
         setForm(data);
+
+        const imagePath = `items/${id}.jpg`;
+        const storageRef = ref(getStorage(), imagePath);
+        const imageUrl = await getDownloadURL(storageRef);
+        setImagePreview(imageUrl);
       } catch (err) {
         // eslint-disable-next-line no-console
         console.log(err);
@@ -94,25 +128,50 @@ const DialogEdit = ({ open, setOpen, id }) => {
             ))}
           </Select>
         </FormControl>
-        <label htmlFor="contained-button-file">
-          <Typography variant="body1" gutterBottom sx={{ mt: 2 }}>
-            Choose Image
-          </Typography>
-          <input
-            accept="image/*"
-            id="contained-button-file"
-            type="file"
-            onChange={(e) => setForm({ ...form, image: e.target.value })}
-            value={form.image || ''}
-          />
-        </label>
+        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+          <Box>
+            <label htmlFor="contained-button-file">
+              <Typography variant="body1" gutterBottom sx={{ mt: 2 }}>
+                Choose Image
+              </Typography>
+              <input
+                accept="image/*"
+                id="contained-button-file"
+                type="file"
+                onChange={(e) => {
+                  if (!e.target.files || e.target.files.length === 0) {
+                    return;
+                  }
+
+                  setImage(e.target.files[0]);
+                }}
+              />
+            </label>
+          </Box>
+          <Box sx={{ flex: 1, p: 2 }}>
+            <img src={imagePreview} style={{ aspectRatio: '16/9', width: '100%' }} alt="Preview" />
+          </Box>
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
         <Button
           onClick={async () => {
             const updatedForm = { ...form };
-            delete updatedForm.image;
+            updatedForm.price = Number(updatedForm.price);
+            updatedForm.calories = Number(updatedForm.calories);
+
+            if (image) {
+              const imagePath = `items/${id}.jpg`;
+              const storageRef = ref(getStorage(), imagePath);
+
+              if (typeof image === 'string') {
+                const blob = await window.fetch(image).then((res) => res.blob());
+                await uploadBytes(storageRef, blob);
+              } else {
+                await uploadBytes(storageRef, image);
+              }
+            }
 
             const docRef = doc(getFirestore(), 'items', id);
             await updateDoc(docRef, updatedForm);

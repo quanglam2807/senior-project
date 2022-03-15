@@ -7,18 +7,20 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-import itemIcon from '../../../images/amirali-mirhashemian-sc5sTPMrVfk-unsplash.jpg';
+import itemImageDefault from '../../../images/1600x900.png';
 
-const ItemCard = ({ name, price, calories }) => (
+const ItemCard = ({
+  name, price, calories, image,
+}) => (
   <Card>
     <CardMedia
       component="img"
-      height="140"
-      image={itemIcon}
+      image={image}
       alt={name}
+      sx={{ aspectRatio: '16/9' }}
     />
     <CardContent>
-      <Typography gutterBottom variant="h5" component="div">
+      <Typography gutterBottom variant="h6" component="h6" noWrap>
         {name}
       </Typography>
       <Typography variant="body2" color="text.secondary">
@@ -31,11 +33,16 @@ const ItemCard = ({ name, price, calories }) => (
   </Card>
 );
 
+ItemCard.defaultProps = {
+  image: itemImageDefault,
+};
+
 ItemCard.propTypes = {
   // id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   calories: PropTypes.number.isRequired,
+  image: PropTypes.string,
 };
 
 export default ItemCard;
