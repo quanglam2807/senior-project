@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 import {
-  doc, updateDoc, getFirestore, getDoc,
+  doc, updateDoc, getFirestore, getDoc, deleteDoc,
 } from 'firebase/firestore';
 import {
   getStorage, ref, uploadBytes, getDownloadURL,
@@ -66,7 +66,9 @@ const DialogEdit = ({ open, setOpen, id }) => {
         const docRef = doc(getFirestore(), 'items', id);
         const docSnap = await getDoc(docRef);
         const data = docSnap.data();
-        setForm(data);
+        if (data) {
+          setForm(data);
+        }
 
         const imagePath = `items/${id}.jpg`;
         const storageRef = ref(getStorage(), imagePath);
@@ -181,6 +183,16 @@ const DialogEdit = ({ open, setOpen, id }) => {
           disabled={!form.name || !form.price || !form.calories || !form.category}
         >
           Save
+        </Button>
+        <Button
+          onClick={async () => {
+            handleClose();
+            const docRef = doc(getFirestore(), 'items', id);
+            await deleteDoc(docRef);
+          }}
+          disabled={!form.name || !form.price || !form.calories || !form.category}
+        >
+          Delete
         </Button>
       </DialogActions>
     </Dialog>
