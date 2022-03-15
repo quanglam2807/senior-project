@@ -15,8 +15,6 @@ import { Helmet } from 'react-helmet';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { getFirestore, collection } from 'firebase/firestore';
 
-import firebaseApp from '../../../firebase-app';
-
 import DialogAdd from './DialogAdd';
 import DialogEdit from './DialogEdit';
 
@@ -34,7 +32,7 @@ export default function StickyHeadTable() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [value, loading, error] = useCollection(
-    collection(getFirestore(firebaseApp), 'items'),
+    collection(getFirestore(), 'items'),
     {
       snapshotListenOptions: { includeMetadataChanges: true },
     },

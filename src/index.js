@@ -14,7 +14,7 @@ import { store, persistor } from './reducers';
 
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
-import './firebase-app';
+import './firebaseApp';
 
 import App from './components/App';
 

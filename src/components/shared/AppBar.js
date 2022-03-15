@@ -1,6 +1,6 @@
 import React from 'react';
 import { getAuth, signOut } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { PropTypes } from 'prop-types';
 
@@ -9,6 +9,7 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
@@ -61,6 +62,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const PrimarySearchAppBar = ({ admin }) => {
+  const location = useLocation();
   const count = useSelector((state) => state.cart.items.length);
   const searchQuery = useSelector((state) => state.search.query);
   const dispatch = useDispatch();
@@ -111,7 +113,7 @@ const PrimarySearchAppBar = ({ admin }) => {
   );
 
   return (
-    <Box>
+    <Box sx={{ zIndex: 100 }}>
       <AppBar position="static">
         <Toolbar>
           {/* <IconButton
@@ -134,32 +136,45 @@ const PrimarySearchAppBar = ({ admin }) => {
           >
             {admin ? 'Marty\'s AdminCP' : 'Marty\'s'}
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-              value={searchQuery}
-              onChange={(e) => dispatch(updateQuery(e.target.value))}
-            />
-          </Search>
+          {location.pathname === '/user' && (
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+                value={searchQuery}
+                onChange={(e) => dispatch(updateQuery(e.target.value))}
+              />
+            </Search>
+          )}
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: 'flex' }}>
             {!admin && (
-              <IconButton
-                size="large"
-                aria-label="check out"
-                color="inherit"
-                onClick={() => {
-                  navigate('/user/checkout');
-                }}
-              >
-                <Badge badgeContent={count} color="error">
-                  <ShoppingCartIcon />
-                </Badge>
-              </IconButton>
+              <>
+                <Button
+                  size="large"
+                  color="inherit"
+                  onClick={() => {
+                    navigate('/user/orders');
+                  }}
+                >
+                  My Orders
+                </Button>
+                <IconButton
+                  size="large"
+                  aria-label="check out"
+                  color="inherit"
+                  onClick={() => {
+                    navigate('/user/checkout');
+                  }}
+                >
+                  <Badge badgeContent={count} color="error">
+                    <ShoppingCartIcon />
+                  </Badge>
+                </IconButton>
+              </>
             )}
             <IconButton
               size="large"
