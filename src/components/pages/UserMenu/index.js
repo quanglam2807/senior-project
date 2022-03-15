@@ -9,10 +9,13 @@ import { getFirestore, collection } from 'firebase/firestore';
 import {
   getStorage, ref, getDownloadURL,
 } from 'firebase/storage';
+import * as JsSearch from 'js-search';
+import { useSelector } from 'react-redux';
 
 import ItemCard from './ItemCard';
 
 const BasicTabs = () => {
+  const searchQuery = useSelector((state) => state.search.query);
   const [images, setImages] = useState({});
   const [activeCategory, setActiveCategory] = useState('all');
   const [value, loading, error] = useCollection(
@@ -49,6 +52,20 @@ const BasicTabs = () => {
     })();
   }, [menuItems, setImages]);
 
+  const search = useMemo(() => {
+    const s = new JsSearch.Search('id');
+    s.addIndex('name');
+    s.addDocuments(menuItems);
+    return s;
+  }, [menuItems]);
+
+  const searchResults = useMemo(() => {
+    if (searchQuery) {
+      return search.search(searchQuery);
+    }
+    return menuItems;
+  }, [menuItems, searchQuery]);
+
   const handleChange = (event, newValue) => {
     setActiveCategory(newValue);
   };
@@ -59,11 +76,12 @@ const BasicTabs = () => {
     return newCategories;
   }, [menuItems]);
 
-  let filteredMenuItems = menuItems;
-
-  if (activeCategory !== 'all') {
-    filteredMenuItems = menuItems.filter((item) => item.category === activeCategory);
-  }
+  const filteredMenuItems = useMemo(() => {
+    if (!searchQuery && activeCategory !== 'all') {
+      return searchResults.filter((item) => item.category === activeCategory);
+    }
+    return searchResults;
+  }, [searchResults, searchQuery]);
 
   return (
     <Box
@@ -76,19 +94,28 @@ const BasicTabs = () => {
       }}
     >
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={activeCategory} onChange={handleChange} aria-label="basic tabs example">
-          <Tab
-            value="all"
-            label="All"
-          />
-          {categories.map((category) => (
+        {searchQuery ? (
+          <Tabs value="search" onChange={null} aria-label="Categories">
             <Tab
-              key={category}
-              value={category}
-              label={category}
+              value="search"
+              label="Search Results"
             />
-          ))}
-        </Tabs>
+          </Tabs>
+        ) : (
+          <Tabs value={activeCategory} onChange={handleChange} aria-label="Categories">
+            <Tab
+              value="all"
+              label="All"
+            />
+            {categories.map((category) => (
+              <Tab
+                key={category}
+                value={category}
+                label={category}
+              />
+            ))}
+          </Tabs>
+        )}
       </Box>
       <Box sx={{ flex: 1, p: 2, overflow: 'auto' }}>
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 16 }}>
