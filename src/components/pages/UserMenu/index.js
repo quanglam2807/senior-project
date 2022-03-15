@@ -10,15 +10,13 @@ import {
   getStorage, ref, getDownloadURL,
 } from 'firebase/storage';
 
-import firebaseApp from '../../../firebase-app';
-
 import ItemCard from './ItemCard';
 
 const BasicTabs = () => {
   const [images, setImages] = useState({});
   const [activeCategory, setActiveCategory] = useState('all');
   const [value, loading, error] = useCollection(
-    collection(getFirestore(firebaseApp), 'items'),
+    collection(getFirestore(), 'items'),
     {
       snapshotListenOptions: { includeMetadataChanges: true },
     },

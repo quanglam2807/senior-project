@@ -59,7 +59,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 // }));
 
 const PrimarySearchAppBar = () => {
-  const count = useSelector((state) => state.counter.value);
+  const count = useSelector((state) => state.cart.items.length);
 
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
