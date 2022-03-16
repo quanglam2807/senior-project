@@ -6,13 +6,15 @@ import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import {
-  getFirestore, collection, where, query,
+  getFirestore, collection, where, query, doc, updateDoc, Timestamp,
 } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { Helmet } from 'react-helmet';
 import moment from 'moment';
+import { useSnackbar } from 'notistack';
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -20,6 +22,7 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 });
 
 const UserOrders = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [menuItemsValue, menuItemsLoading, menuItemsError] = useCollection(
     collection(getFirestore(), 'items'),
     {
@@ -73,11 +76,10 @@ const UserOrders = () => {
         ...order,
         detailedCartItems,
         total,
-        orderAt: order.orderAt.toDate(),
       };
     });
 
-    o.sort((a, b) => b.orderAt - a.orderAt);
+    o.sort((a, b) => b.lastUpdatedAt.toDate() - a.lastUpdatedAt.toDate());
 
     return o;
   }, [orders, menuItems]);
@@ -107,9 +109,70 @@ const UserOrders = () => {
 
       {detailedOrders.map((order) => (
         <Paper key={order.id} sx={{ p: 2, my: 2 }}>
-          <Alert severity="info">
+          <Alert
+            severity={(() => {
+              if (order.status === 'approved') {
+                return 'warning';
+              }
+
+              if (order.status === 'rejected' || order.status === 'cancelled') {
+                return 'error';
+              }
+
+              if (order.status === 'prepared' || order.status === 'served') {
+                return 'success';
+              }
+
+              return 'info';
+            })()}
+            action={(
+              <>
+                {order.status === 'pending' && (
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={async () => {
+                      const docRef = doc(getFirestore(), 'orders', order.id);
+                      await updateDoc(docRef, {
+                        status: 'cancelled',
+                        cancelledAt: Timestamp.now(),
+                        lastUpdatedAt: Timestamp.now(),
+                      });
+                      enqueueSnackbar('Cancelled order.', {
+                        variant: 'error',
+                      });
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                )}
+              </>
+            )}
+          >
             <Typography variant="h6">
-              {`Pending. Ordered at ${moment(order.orderAt).format('LLLL')}.`}
+              {(() => {
+                if (order.status === 'approved') {
+                  return `Approved at ${moment(order.approvedAt.toDate()).format('LLLL')}. The food is being prepare.`;
+                }
+
+                if (order.status === 'rejected') {
+                  return `Rejected at ${moment(order.rejectedAt.toDate()).format('LLLL')}.`;
+                }
+
+                if (order.status === 'cancelled') {
+                  return `Cancelled at ${moment(order.cancelledAt.toDate()).format('LLLL')}.`;
+                }
+
+                if (order.status === 'prepared') {
+                  return `Prepared at ${moment(order.preparedAt.toDate()).format('LLLL')}. Time to pick up!`;
+                }
+
+                if (order.status === 'served') {
+                  return `Served at ${moment(order.approvedAt.toDate()).format('LLLL')}.`;
+                }
+
+                return `Pending. Ordered at ${moment(order.orderedAt.toDate()).format('LLLL')}.`;
+              })()}
             </Typography>
           </Alert>
 

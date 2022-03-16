@@ -115,7 +115,8 @@ const UserCheckout = () => {
               cartItems,
               status: 'pending',
               uid: getAuth().currentUser.uid,
-              orderAt: Timestamp.now(),
+              orderedAt: Timestamp.now(),
+              lastUpdatedAt: Timestamp.now(),
             });
             dispatch(clearItems());
             enqueueSnackbar('Ordered successfully! We will notify you when the order is ready.', { variant: 'success' });
