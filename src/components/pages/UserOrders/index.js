@@ -90,7 +90,6 @@ const UserOrders = () => {
         flex: 1,
         p: 4,
         overflow: 'auto',
-        bgcolor: 'grey.100',
       }}
     >
       <Helmet>
