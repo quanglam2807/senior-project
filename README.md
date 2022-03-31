@@ -10,7 +10,7 @@ The app can be installed as mobile or desktop app as [Progressive Web App](https
 - Jorge Contreras
 - Laura Bailey
 
-**Advisor**: Roman Yasinovskyy.
+**Advisor**: Roman Yasinovskyy & Paul Mattson.
 
 ## Development
 1. Install Git, [Node.js 14](https://nodejs.org/), [yarn 1 (classic)](https://classic.yarnpkg.com/).
@@ -25,6 +25,19 @@ yarn
   - Build the project for prroduction: `yarn build`.
   - Run the linting check: `yarn lint`.
   - Run the tests: `yarn test`.
+
+## Testing
+Run `npx playwright test` to run the end-to-end tests.
+
+If the required browsers are not installed, use the following command to install them
+
+```bash
+# install supported browsers
+npx playwright install [BROWSER_ID]
+```
+
+For example, run `npx playwright install chrome` to install Google Chrome.
+
 
 ## Project Structure
 - `src`: the source code of the React app.
