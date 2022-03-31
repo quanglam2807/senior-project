@@ -33,10 +33,10 @@ If the required browsers are not installed, use the following command to install
 
 ```bash
 # install supported browsers
-npx playwright install [BROWSER_ID]
+npx playwright install
 ```
 
-For example, run `npx playwright install chrome` to install Google Chrome.
+You can also install a specific browser (e.g. run `npx playwright install firefox` to install Firefox).
 
 
 ## Project Structure
