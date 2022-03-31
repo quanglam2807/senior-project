@@ -47,7 +47,7 @@
     "postinstall": "cd functions && yarn install",
     "start": "ESLINT_NO_DEV_ERRORS=true react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "npx playwright test",
     "eject": "react-scripts eject",
     "lint": "eslint ./src && yarn lint:functions",
     "lint:functions": "cd functions && yarn lint",
@@ -72,6 +72,7 @@
     ]
   },
   "devDependencies": {
+    "@playwright/test": "^1.20.1",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "18.2.1",
     "eslint-plugin-import": "^2.25.3",
